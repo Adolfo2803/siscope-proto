@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="sidebar(activeTab)" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}" th:href="@{/dashboard}">
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${activeTab == 'enfermera' ? 'active' : ''}" th:href="@{/enfermera}">
+                    <i class="fas fa-users me-2"></i>
+                    Personal de Enfermería
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${activeTab == 'ausencia' ? 'active' : ''}" th:href="@{/ausencia}">
+                    <i class="fas fa-calendar-minus me-2"></i>
+                    Registro de Ausencias
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link" th:classappend="${activeTab == 'concepto' ? 'active' : ''}" th:href="@{/concepto}">
+                    <i class="fas fa-clipboard-list me-2"></i>
+                    Conceptos de Ausencia
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${activeTab == 'reporte' ? 'active' : ''}" th:href="@{/reporte}">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Reportes
+                </a>
+            </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Administración</span>
+        </h6>
+        <ul class="nav flex-column mb-2" sec:authorize="hasRole('ADMIN')">
+            <li class="nav-item">
+                <a class="nav-link" th:classappend="${activeTab == 'usuario' ? 'active' : ''}" th:href="@{/usuario}">
+                    <i class="fas fa-user-cog me-2"></i>
+                    Usuarios
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

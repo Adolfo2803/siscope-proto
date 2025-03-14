@@ -1,0 +1,313 @@
+<!-- src/main/resources/templates/reporte/generador.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Reportes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <i class="fas fa-user-nurse me-2"></i>
+            SISCOPE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/dashboard}">
+                        <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/enfermera}">
+                        <i class="fas fa-users me-1"></i> Personal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/ausencia}">
+                        <i class="fas fa-calendar-minus me-1"></i> Ausencias
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/concepto}">
+                        <i class="fas fa-clipboard-list me-1"></i> Conceptos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reporte}">
+                        <i class="fas fa-chart-bar me-1"></i> Reportes
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/usuario}">
+                        <i class="fas fa-user-cog me-1"></i> Usuarios
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user me-1"></i>
+                        <span sec:authentication="name">Usuario</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/enfermera}">
+                            <i class="fas fa-users me-2"></i>
+                            Personal de Enfermería
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/ausencia}">
+                            <i class="fas fa-calendar-minus me-2"></i>
+                            Registro de Ausencias
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/concepto}">
+                            <i class="fas fa-clipboard-list me-2"></i>
+                            Conceptos de Ausencia
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/reporte}">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Administración</span>
+                </h6>
+                <ul class="nav flex-column mb-2" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/usuario}">
+                            <i class="fas fa-user-cog me-2"></i>
+                            Usuarios
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Generador de Reportes</h1>
+            </div>
+
+            <!-- Formulario de reporte -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Seleccione los parámetros del reporte</h6>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/reporte/generar}" method="get">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fechaInicio" class="form-label">Fecha de Inicio*</label>
+                                <input type="date" name="fechaInicio" id="fechaInicio" class="form-control"
+                                       th:value="${#temporals.format(fechaInicio, 'yyyy-MM-dd')}" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="fechaFin" class="form-label">Fecha de Fin*</label>
+                                <input type="date" name="fechaFin" id="fechaFin" class="form-control"
+                                       th:value="${#temporals.format(fechaFin, 'yyyy-MM-dd')}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="servicioId" class="form-label">Filtrar por Servicio</label>
+                                <select name="servicioId" id="servicioId" class="form-select">
+                                    <option value="">-- Todos los Servicios --</option>
+                                    <option th:each="servicio : ${servicios}"
+                                            th:value="${servicio.id}"
+                                            th:text="${servicio.nombre}">
+                                        Servicio
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="turnoId" class="form-label">Filtrar por Turno</label>
+                                <select name="turnoId" id="turnoId" class="form-select">
+                                    <option value="">-- Todos los Turnos --</option>
+                                    <option th:each="turno : ${turnos}"
+                                            th:value="${turno.id}"
+                                            th:text="${turno.nombre}">
+                                        Turno
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="conceptoId" class="form-label">Filtrar por Concepto</label>
+                                <select name="conceptoId" id="conceptoId" class="form-select">
+                                    <option value="">-- Todos los Conceptos --</option>
+                                    <option th:each="concepto : ${conceptos}"
+                                            th:value="${concepto.id}"
+                                            th:text="${concepto.nombre}">
+                                        Concepto
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary me-md-2">
+                                <i class="fas fa-search"></i> Generar Reporte
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-undo"></i> Limpiar Filtros
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Accesos rápidos a informes comunes -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Informes Rápidos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                <!-- Enlaces simplificados -->
+                                <a th:href="@{/reporte/generar(fechaInicio=${#temporals.format(#temporals.createNow().withDayOfMonth(1), 'yyyy-MM-dd')},fechaFin=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')})}"
+                                   class="list-group-item list-group-item-action">
+                                    <i class="fas fa-calendar-alt me-2"></i> Ausencias del Mes Actual
+                                </a>
+                                <a th:href="@{/reporte/generar(fechaInicio=${#temporals.format(#temporals.createNow().minusMonths(1).withDayOfMonth(1), 'yyyy-MM-dd')},fechaFin=${#temporals.format(#temporals.createNow().minusMonths(1).withDayOfMonth(#temporals.lengthOfMonth(#temporals.createNow().minusMonths(1))), 'yyyy-MM-dd')})}"
+                                   class="list-group-item list-group-item-action">
+                                    <i class="fas fa-calendar-minus me-2"></i> Ausencias del Mes Anterior
+                                </a>
+                                <a th:href="@{/reporte/generar(fechaInicio=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')},fechaFin=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')})}"
+                                   class="list-group-item list-group-item-action">
+                                    <i class="fas fa-calendar-day me-2"></i> Ausencias de Hoy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Opciones de Exportación</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Después de generar un reporte, puede exportarlo en los siguientes formatos:</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-success mb-2" disabled id="btnExcel">
+                                    <i class="fas fa-file-excel me-2"></i> Exportar a Excel
+                                </button>
+                                <button class="btn btn-danger" disabled id="btnPdf">
+                                    <i class="fas fa-file-pdf me-2"></i> Exportar a PDF
+                                </button>
+                            </div>
+                            <p class="text-muted mt-2 small">Los botones se habilitarán después de generar un reporte.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">© 2025 SisCoPe - Sistema de Gestión de Enfermería</span>
+    </div>
+    <div class="container text-center">
+        <span class="text-muted">Desarrollado por el Depto. de Tecnologias de la Informacíon</span>
+    </div>
+    <div class="container text-center">
+        <span class="text-muted">Hopital General Tuxpan DR Emilio Alcazar</span>
+    </div></footer>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<!-- Script para inicializar fechas -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const fechaInicio = document.getElementById('fechaInicio');
+        const fechaFin = document.getElementById('fechaFin');
+
+        // Validar fechas al enviar
+        form.addEventListener('submit', function(e) {
+            if (new Date(fechaInicio.value) > new Date(fechaFin.value)) {
+                e.preventDefault();
+                alert('La fecha de inicio no puede ser posterior a la fecha de fin.');
+            }
+        });
+
+        // Filtros mutuamente excluyentes
+        const servicioId = document.getElementById('servicioId');
+        const turnoId = document.getElementById('turnoId');
+        const conceptoId = document.getElementById('conceptoId');
+
+        servicioId.addEventListener('change', function() {
+            if (this.value) {
+                turnoId.value = '';
+                conceptoId.value = '';
+            }
+        });
+
+        turnoId.addEventListener('change', function() {
+            if (this.value) {
+                servicioId.value = '';
+                conceptoId.value = '';
+            }
+        });
+
+        conceptoId.addEventListener('change', function() {
+            if (this.value) {
+                servicioId.value = '';
+                turnoId.value = '';
+            }
+        });
+    });
+</script>
+</body>
+</html>
