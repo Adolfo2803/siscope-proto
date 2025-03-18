@@ -43,13 +43,13 @@ public class ReporteController {
         List<Servicio> servicios = servicioService.findAllActivos();
         List<Turno> turnos = turnoService.findAllActivos();
         List<ConceptoAusencia> conceptos = conceptoAusenciaService.findAllActivos();
-
+        model.addAttribute("activeTab", "reporte");
         model.addAttribute("servicios", servicios);
         model.addAttribute("turnos", turnos);
         model.addAttribute("conceptos", conceptos);
         model.addAttribute("fechaInicio", LocalDate.now().withDayOfMonth(1));
         model.addAttribute("fechaFin", LocalDate.now());
-        model.addAttribute("activeTab", "reporte");
+
 
         return "reporte/generador";
     }
@@ -86,7 +86,7 @@ public class ReporteController {
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
         model.addAttribute("totalAusencias", resultado.size());
-        model.addAttribute("activeTab", "reporte");
+
 
         return "reporte/resultado";
     }

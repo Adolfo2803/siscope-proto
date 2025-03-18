@@ -9,7 +9,9 @@ public class MainController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/dashboard/index";
+        //return "redirect:/dashboard/index";
+        return "index";
+
     }
 
     @GetMapping("/login")

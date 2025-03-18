@@ -6,18 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Reportes</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Estilos comunes -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
 
 </head>
 <body>
 <!-- Navbar -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/dashboard}">
             <i class="fas fa-user-nurse me-2"></i>
-            SISCOPE
+            SisCoPe
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +29,7 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/dashboard}">
+                    <a class="nav-link " th:href="@{/dashboard}">
                         <i class="fas fa-tachometer-alt me-1"></i> Dashboard
                     </a>
                 </li>
@@ -41,12 +44,22 @@
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/servicio}">
+                        <i class="fas fa-hospital me-1"></i> Servicios
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/turno}">
+                        <i class="fas fa-clock me-1"></i> Turnos
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" th:href="@{/concepto}">
                         <i class="fas fa-clipboard-list me-1"></i> Conceptos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/reporte}">
+                    <a class="nav-link active" th:href="@{/reporte}">
                         <i class="fas fa-chart-bar me-1"></i> Reportes
                     </a>
                 </li>
@@ -72,6 +85,33 @@
     </div>
 </nav>
 
+<!-- Mensajes Flash -->
+<div class="container mt-5 pt-3">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success != null}">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${success}">Mensaje de éxito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error != null}">
+        <i class="fas fa-times-circle me-2"></i>
+        <span th:text="${error}">Mensaje de error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${warning != null}">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span th:text="${warning}">Mensaje de advertencia</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="alert alert-info alert-dismissible fade show" role="alert" th:if="${info != null}">
+        <i class="fas fa-info-circle me-2"></i>
+        <span th:text="${info}">Mensaje informativo</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -79,7 +119,7 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/dashboard}">
+                        <a class="nav-link " th:href="@{/dashboard}">
                             <i class="fas fa-tachometer-alt me-2"></i>
                             Dashboard
                         </a>
@@ -97,13 +137,25 @@
                         </a>
                     </li>
                     <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/servicio}">
+                            <i class="fas fa-hospital me-2"></i>
+                            Servicios
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/turno}">
+                            <i class="fas fa-clock me-2"></i>
+                            Turnos
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                         <a class="nav-link" th:href="@{/concepto}">
                             <i class="fas fa-clipboard-list me-2"></i>
                             Conceptos de Ausencia
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/reporte}">
+                        <a class="nav-link active" th:href="@{/reporte}">
                             <i class="fas fa-chart-bar me-2"></i>
                             Reportes
                         </a>
@@ -123,6 +175,7 @@
                 </ul>
             </div>
         </div>
+
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -266,48 +319,113 @@
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 <script th:src="@{/js/scripts.js}"></script>
-<!-- Script para inicializar fechas -->
-<script>
+
+<!-- Script para gráficos -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const fechaInicio = document.getElementById('fechaInicio');
-        const fechaFin = document.getElementById('fechaFin');
+        // Comprobaciones de seguridad para evitar errores
+        var conceptoChart = document.getElementById('conceptoChart');
+        var servicioChart = document.getElementById('servicioChart');
 
-        // Validar fechas al enviar
-        form.addEventListener('submit', function(e) {
-            if (new Date(fechaInicio.value) > new Date(fechaFin.value)) {
-                e.preventDefault();
-                alert('La fecha de inicio no puede ser posterior a la fecha de fin.');
+        // Datos para los gráficos
+        var estadisticasPorConcepto = /*[[${estadisticasPorConcepto}]]*/ null;
+        var estadisticasPorServicio = /*[[${estadisticasPorServicio}]]*/ null;
+
+        var conceptoLabels = [];
+        var conceptoData = [];
+        var servicioLabels = [];
+        var servicioData = [];
+
+        // Procesar datos solo si existen
+        if (estadisticasPorConcepto) {
+            // Convertir keySet a array de etiquetas
+            for (var key in estadisticasPorConcepto) {
+                if (estadisticasPorConcepto.hasOwnProperty(key)) {
+                    conceptoLabels.push(key);
+                    conceptoData.push(estadisticasPorConcepto[key]);
+                }
             }
-        });
+        }
 
-        // Filtros mutuamente excluyentes
-        const servicioId = document.getElementById('servicioId');
-        const turnoId = document.getElementById('turnoId');
-        const conceptoId = document.getElementById('conceptoId');
-
-        servicioId.addEventListener('change', function() {
-            if (this.value) {
-                turnoId.value = '';
-                conceptoId.value = '';
+        if (estadisticasPorServicio) {
+            // Convertir keySet a array de etiquetas
+            for (var key in estadisticasPorServicio) {
+                if (estadisticasPorServicio.hasOwnProperty(key)) {
+                    servicioLabels.push(key);
+                    servicioData.push(estadisticasPorServicio[key]);
+                }
             }
-        });
+        }
 
-        turnoId.addEventListener('change', function() {
-            if (this.value) {
-                servicioId.value = '';
-                conceptoId.value = '';
-            }
-        });
+        // Configuración de colores
+        var backgroundColors = [
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)',
+            'rgba(255, 159, 64, 0.7)',
+            'rgba(255, 99, 132, 0.7)'
+        ];
 
-        conceptoId.addEventListener('change', function() {
-            if (this.value) {
-                servicioId.value = '';
-                turnoId.value = '';
+        // Configuración para gráfico de conceptos
+        if (conceptoChart && conceptoLabels.length > 0) {
+            try {
+                new Chart(conceptoChart, {
+                    type: 'pie',
+                    data: {
+                        labels: conceptoLabels,
+                        datasets: [{
+                            data: conceptoData,
+                            backgroundColor: backgroundColors,
+                            hoverBackgroundColor: backgroundColors
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Error al crear gráfico de conceptos:", e);
             }
-        });
+        }
+
+        // Configuración para gráfico de servicios
+        if (servicioChart && servicioLabels.length > 0) {
+            try {
+                new Chart(servicioChart, {
+                    type: 'pie',
+                    data: {
+                        labels: servicioLabels,
+                        datasets: [{
+                            data: servicioData,
+                            backgroundColor: backgroundColors,
+                            hoverBackgroundColor: backgroundColors
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Error al crear gráfico de servicios:", e);
+            }
+        }
     });
+    /*]]>*/
 </script>
 </body>
 </html>

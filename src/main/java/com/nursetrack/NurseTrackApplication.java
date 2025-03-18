@@ -57,7 +57,7 @@ public class NurseTrackApplication {
 				adminUser.setPassword(passwordEncoder.encode("admin123"));
 				adminUser.setNombre("Administrador");
 				adminUser.setApellidos("Sistema");
-				adminUser.setEmail("admin@nursetrack.com");
+				adminUser.setEmail("admin@adosimbron.com");
 				adminUser.setActivo(true);
 
 				// Asignar rol admin
@@ -69,7 +69,7 @@ public class NurseTrackApplication {
 				regularUser.setPassword(passwordEncoder.encode("user123"));
 				regularUser.setNombre("Usuario");
 				regularUser.setApellidos("Regular");
-				regularUser.setEmail("user@nursetrack.com");
+				regularUser.setEmail("user@adosimbron.com");
 				regularUser.setActivo(true);
 
 				// Asignar rol user
@@ -194,7 +194,7 @@ public class NurseTrackApplication {
 				enfermera1.setServicio(urgencias);
 				enfermera1.setTurno(matutino);
 				enfermera1.setFechaCreacion(LocalDate.now());
-				enfermera1.setUsuarioCreacion("system");
+				enfermera1.setUsuarioCreacion("Ado Simbron");
 				enfermera1.setActivo(true);
 
 				Enfermera enfermera2 = new Enfermera();
@@ -210,7 +210,7 @@ public class NurseTrackApplication {
 				enfermera2.setServicio(medicina);
 				enfermera2.setTurno(vespertino);
 				enfermera2.setFechaCreacion(LocalDate.now());
-				enfermera2.setUsuarioCreacion("system");
+				enfermera2.setUsuarioCreacion("Ado Simbron");
 				enfermera2.setActivo(true);
 
 				Enfermera enfermera3 = new Enfermera();
@@ -226,7 +226,7 @@ public class NurseTrackApplication {
 				enfermera3.setServicio(cirugia);
 				enfermera3.setTurno(nocturno);
 				enfermera3.setFechaCreacion(LocalDate.now());
-				enfermera3.setUsuarioCreacion("system");
+				enfermera3.setUsuarioCreacion("Ado Simbron");
 				enfermera3.setActivo(true);
 
 				enfermeraRepository.saveAll(Arrays.asList(enfermera1, enfermera2, enfermera3));
@@ -246,7 +246,7 @@ public class NurseTrackApplication {
 				ausencia1.setFechaFin(hoy.plusDays(5));
 				ausencia1.setObservaciones("Vacaciones programadas");
 				ausencia1.setFechaRegistro(hoy.minusDays(30));
-				ausencia1.setUsuarioRegistro("system");
+				ausencia1.setUsuarioRegistro("Ado Simbron");
 
 				Ausencia ausencia2 = new Ausencia();
 				ausencia2.setEnfermera(enfermera2);
@@ -255,7 +255,7 @@ public class NurseTrackApplication {
 				ausencia2.setFechaFin(hoy.plusDays(2));
 				ausencia2.setObservaciones("Incapacidad por gripe");
 				ausencia2.setFechaRegistro(hoy.minusDays(1));
-				ausencia2.setUsuarioRegistro("system");
+				ausencia2.setUsuarioRegistro("Ado Simbron");
 
 				ausenciaRepository.saveAll(Arrays.asList(ausencia1, ausencia2));
 
